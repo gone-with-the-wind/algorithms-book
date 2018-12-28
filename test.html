@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+		
+Number.prototype.compareTo=function(b){
+	return this-b
+}
+
+String.prototype.compareTo=function(b){
+	if(isFinite(this)&&isFinite(b)){
+		return this-b
+	}else{
+		return this.localeCompare(b)
+	}
+}
+
+//生成随机算法
+class SortTestHelper{
+	constructor(){
+
+	}
+	static generateRandomArray(n,rangeL,rangeR){
+		let arr=[]
+		for(let i=0;i<n;i++){
+			arr[i]=Math.random() * (rangeR - rangeL + 1) + rangeL
+		}
+		return arr
+	}
+	static printArray(arr){
+		console.table(arr)
+	}
+	static isSorted(arr){
+		for(let i=0;i<arr.length;i++){
+			if(arr[i].compareTo(arr[i+1])>0){
+				return false
+			}
+		}
+		return true
+	}
+	static testSort(sortClassName,arr){
+		try{
+      let sortClass=eval("new "+sortClassName+"()"); 
+    
+      console.time('test');
+      sortClass.sort(arr)
+      console.timeEnd('test');
+    
+	}
+	catch(e){
+		console.log(e)
+	}
+}
+}
+
+ 
+
+
+
+/*冒泡排序法*/
+class BubbleSort{
+	constructor(){
+
+	}
+	sort(arr){
+      let n=arr.length;
+      let swapped
+      do{
+            swapped = false;
+            for( let i = 1 ; i < n ; i ++ )
+                if( arr[i-1].compareTo(arr[i]) > 0 ){
+                    this.swap( arr , i-1 , i );
+                    swapped = true;
+                }
+
+            // 优化, 每一趟Bubble Sort都将最大的元素放在了最后的位置
+            // 所以下一次排序, 最后的元素可以不再考虑
+            n --;
+        }while(swapped);
+
+	}
+	swap(arr,i,j){
+		let  temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+	}
+}
+
+/*插入排序法*/
+class InsertionSort{
+	constructor(){
+
+	}
+	sort(arr){
+     let n=arr.length;
+     for(let i=1;i<n;i++){
+     	let e=arr[i]
+
+     	let j;
+     	for(j=i;j>0&&arr[j-1].compareTo(arr[j])>0;j--){
+     		arr[j]=arr[j-1]
+     	}
+     	arr[j]=e
+     }
+	}
+		swap(arr,i,j){
+		let  temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+	}
+}
+
+
+
+
+
+//测试
+let n=2000;
+let left=0
+let right=10000000
+let arr=SortTestHelper.generateRandomArray(n,left,right)
+console.log('------------------------------------------')
+console.log('BubbleSort')
+console.log( SortTestHelper.isSorted(arr))
+SortTestHelper.testSort('BubbleSort',arr)
+console.log( SortTestHelper.isSorted(arr))
+console.log('------------------------------------------')
+
+arr=SortTestHelper.generateRandomArray(n,left,right)
+console.log('------------------------------------------')
+console.log('InsertionSort')
+console.log( SortTestHelper.isSorted(arr))
+SortTestHelper.testSort('InsertionSort',arr)
+console.log( SortTestHelper.isSorted(arr))
+console.log('------------------------------------------')
+
+
+
+
+
+
+	</script>
+	
+</body>
+</html>
